@@ -36,6 +36,9 @@
                                 {{row.item.id}}
                             </router-link>
                         </template>
+                        <template v-slot:cell(revision)="row">
+                            <router-link :to="{name: 'flowDiff', params: row.item}">{{row.item.revision}}</router-link>
+                        </template>
                     </b-table>
                 </template>
             </data-table>

@@ -19,6 +19,7 @@
         "lodash": "4.17.15",
         "moment-range": "4.0.2",
         "throttle-debounce": "^2.1.0",
+        "text-diff": "^1.0.1",
         "vue": "^2.6.11",
         "vue-axios": "^2.1.5",
         "vue-i18n": "^8.15.5",

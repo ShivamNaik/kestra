@@ -4,6 +4,7 @@ import Settings from '../components/settings/Settings.vue'
 import Flows from '../components/flows/Flows.vue'
 import FlowsAgg from '../components/flows/FlowsAgg.vue'
 import FlowRoot from '../components/flows/FlowRoot.vue'
+import FlowDiff from '../components/flows/FlowDiff.vue'
 import FlowEdit from '../components/flows/FlowEdit.vue'
 import Executions from '../components/executions/Executions.vue'
 import ExecutionRoot from '../components/executions/ExecutionRoot.vue'
@@ -20,6 +21,7 @@ export default new VueRouter({
         { name: 'flowsList', path: '/flows', component: FlowsAgg },
         { name: 'flowsAdd', path: '/flows/add', component: FlowEdit },
         { name: 'flow', path: '/flows/:namespace/:id', component: FlowRoot },
+        { name: 'flowDiff', path: '/flowDiff/:namespace/:id', component: FlowDiff },
         //Executions
         { name: 'executionsByFlow', path: '/executions/:namespace/:flowId', component: Executions },
         { name: 'executionsList', path: '/executions', component: Executions },
