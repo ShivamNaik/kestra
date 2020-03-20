@@ -46,6 +46,10 @@ export default {
         if (this.$route.query.search) {
             this.filter = this.$route.query.search || "";
         }
+        this.$store.dispatch("execution/loadLogs", {
+            executionId: this.$route.params.id,
+            query: { size: 1000, page: 1 }
+        });
     },
     watch: {
         $route() {

@@ -26,9 +26,10 @@ export default {
       return {
         DEBUG: "badge-secondary",
         INFO: "badge-primary",
-        WARNING: "badge-warning",
+        WARN: "badge-warning",
         ERROR: "badge-danger",
-        CRITICAL: "badge-danger font-weight-bold"
+        CRITICAL: "badge-danger font-weight-bold",
+        TRACE: "badge-dark"
       }[this.log.level];
     },
     filtered() {

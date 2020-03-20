@@ -64,14 +64,9 @@
                         </div>
 
                         <!-- Log lines -->
-                        <template v-if="attempt.logs">
-                            <template v-for="(log, i) in attempt.logs">
-                                <log-line
-                                    :level="level"
-                                    :filter="filter"
-                                    :log="log"
-                                    :key="`${i}-${log.timestamp}`"
-                                />
+                        <template v-if="logs && logs[taskItem.id]">
+                            <template v-for="log in logs[taskItem.id]">
+                                <log-line :level="level" :filter="filter" :log="log" :key="log.id" />
                             </template>
                         </template>
                     </template>
@@ -80,6 +75,8 @@
             <!-- Outputs -->
             <pre :key="taskItem.id" v-if="showOutputs[taskItem.id] && taskItem.outputs">{{taskItem.outputs}}</pre>
         </div>
+        <!-- <pre>{{execution}}</pre> -->
+        <!-- <pre>{{logs}}</pre> -->
     </div>
 </template>
 <script>
@@ -107,7 +104,7 @@ export default {
         };
     },
     computed: {
-        ...mapState("execution", ["execution", "task"])
+        ...mapState("execution", ["execution", "task", "logs"])
     },
     methods: {
         toggleShowOutput(task) {
