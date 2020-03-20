@@ -6,6 +6,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import io.micronaut.context.ApplicationContext;
 import org.kestra.core.models.executions.Execution;
+import org.kestra.core.models.executions.LogEntry;
 import org.kestra.core.models.executions.TaskRun;
 import org.kestra.core.models.flows.Flow;
 import org.kestra.core.models.flows.State;
@@ -20,8 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 abstract public class TestsUtils {
     private static ObjectMapper mapper = JacksonMapper.ofYaml();
@@ -41,6 +44,13 @@ abstract public class TestsUtils {
 
     public static void loads(LocalFlowRepositoryLoader repositoryLoader, URL url) throws IOException, URISyntaxException {
         repositoryLoader.load(url);
+    }
+
+    public static List<LogEntry> filterLogs(List<LogEntry> logs, TaskRun taskRun) {
+        return logs
+            .stream()
+            .filter(r -> r.getTaskRunId().equals(taskRun.getId()))
+            .collect(Collectors.toList());
     }
 
     public static Flow mockFlow() {

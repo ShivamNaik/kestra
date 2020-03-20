@@ -1,8 +1,8 @@
 package org.kestra.core.services;
 
 import com.devskiller.friendly_id.FriendlyId;
+import io.micronaut.context.ApplicationContext;
 import io.micronaut.core.util.StringUtils;
-import org.kestra.core.exceptions.IllegalVariableEvaluationException;
 import org.kestra.core.models.executions.Execution;
 import org.kestra.core.models.executions.TaskRun;
 import org.kestra.core.models.flows.Flow;
@@ -12,13 +12,13 @@ import org.kestra.core.queues.QueueInterface;
 import org.kestra.core.repositories.FlowRepositoryInterface;
 import org.kestra.core.runners.RunContext;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import static org.kestra.core.utils.Rethrow.throwFunction;
 import static org.kestra.core.utils.Rethrow.throwPredicate;
@@ -28,6 +28,9 @@ import static org.kestra.core.utils.Rethrow.throwPredicate;
  */
 @Singleton
 public class ExecutionService {
+    @Inject
+    ApplicationContext applicationContext;
+
     @Inject
     private FlowRepositoryInterface flowRepositoryInterface;
 
@@ -238,7 +241,14 @@ public class ExecutionService {
         final Predicate<TaskRun> notLastFailed = throwPredicate(taskRun -> {
             boolean isFailed = taskRun.getState().getCurrent().equals(State.Type.FAILED);
             boolean isFlowable = Optional.of(flow)
-                .map(throwFunction(f -> f.findTaskByTaskRun(taskRun, new RunContext()).getTask().isFlowable()))
+                .map(throwFunction(f -> f
+                    .findTaskByTaskRun(
+                        taskRun,
+                        new RunContext(applicationContext, flow, execution)
+                    )
+                    .getTask()
+                    .isFlowable()
+                ))
                 .orElse(false);
 
             return !isFailed || isFlowable;

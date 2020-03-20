@@ -32,3 +32,11 @@ kestra:
           {
             "index.number_of_replicas": 0
           }
+      logs:
+        index: "kestra_logs"
+        cls: org.kestra.core.models.executions.LogEntry
+        mapping-file: log
+        settings: |
+          {
+            "index.number_of_replicas": 0
+          }

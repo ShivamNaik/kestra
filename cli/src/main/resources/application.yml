@@ -85,6 +85,9 @@ kestra:
         properties:
           cleanup.policy: "delete,compact"
 
+      org-kestra-core-models-executions-logentry:
+        name: "kestra_logs"
+
   elasticsearch:
     indices:
       flows:
@@ -99,7 +102,10 @@ kestra:
         index: "kestra_executions"
         cls: org.kestra.core.models.executions.Execution
         mapping-file: execution
-
+      logs:
+        index: "kestra_logs"
+        cls: org.kestra.core.models.executions.LogEntry
+        mapping-file: log
 
   plugins:
     repositories:
