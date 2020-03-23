@@ -9,10 +9,10 @@ import org.kestra.core.models.flows.State;
 import org.kestra.core.queues.QueueException;
 import org.kestra.core.queues.QueueFactoryInterface;
 import org.kestra.core.queues.QueueInterface;
-import org.kestra.core.repositories.LocalFlowRepositoryLoader;
 import org.kestra.core.runners.InputsTest;
 import org.kestra.core.runners.ListenersTest;
 import org.kestra.core.runners.RunnerCaseTest;
+import org.kestra.core.utils.TestsUtils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -30,6 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class KafkaRunnerTest extends AbstractKafkaRunnerTest {
     @Inject
     private RunnerCaseTest runnerCaseTest;
+
+    @Inject
+    @Named(QueueFactoryInterface.WORKERTASKLOG_NAMED)
+    private QueueInterface<LogEntry> workerTaskLogQueue;
 
     @Test
     void full() throws TimeoutException, QueueException {
@@ -91,7 +95,7 @@ class KafkaRunnerTest extends AbstractKafkaRunnerTest {
 
     @Test
     void recordTooLarge() {
-        char[] chars = new char[2000000];
+        char[] chars = new char[11000000];
         Arrays.fill(chars, 'a');
 
         HashMap<String, String> inputs = new HashMap<>(InputsTest.inputs);
@@ -112,6 +116,9 @@ class KafkaRunnerTest extends AbstractKafkaRunnerTest {
 
     @Test
     void workerRecordTooLarge() throws TimeoutException {
+        List<LogEntry> logs = new ArrayList<>();
+        workerTaskLogQueue.receive(logs::add);
+
         char[] chars = new char[600000];
         Arrays.fill(chars, 'a');
 
@@ -125,7 +132,8 @@ class KafkaRunnerTest extends AbstractKafkaRunnerTest {
             (flow, execution1) -> runnerUtils.typedInputs(flow, execution1, inputs)
         );
 
-        assertThat(execution.getState().getCurrent(), is(State.Type.FAILED));
+        assertThat(execution.getState().getCurrent(), is(State.Type.SUCCESS));
+        assertThat(logs.size(), is(131));
     }
 
     @Test

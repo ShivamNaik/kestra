@@ -12,7 +12,6 @@ import javax.inject.Singleton;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @Singleton
 @MemoryRepositoryEnabled
 public class MemoryExecutionRepository implements ExecutionRepositoryInterface {
@@ -58,6 +57,6 @@ public class MemoryExecutionRepository implements ExecutionRepositoryInterface {
 
     @Override
     public Map<String, Stats> findLast24hDurationStats(String query, Pageable pageable) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

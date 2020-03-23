@@ -79,8 +79,7 @@ public class MemoryExecutor extends AbstractExecutor {
             try {
                 this.handleChild(execution, flow);
             } catch (Exception e) {
-                log.error("Failed from executor with {}", e.getMessage(), e);
-                this.toExecution(execution.failedExecutionFromExecutor(e, logQueue));
+                handleFailedExecutionFromExecutor(execution, e);
                 return;
             }
 
@@ -89,8 +88,7 @@ public class MemoryExecutor extends AbstractExecutor {
             try {
                 this.handleWorkerTask(execution, flow);
             } catch (Exception e) {
-                log.error("Failed from executor with {}", e.getMessage(), e);
-                this.toExecution(execution.failedExecutionFromExecutor(e, logQueue));
+                handleFailedExecutionFromExecutor(execution, e);
                 return;
             }
 
@@ -156,6 +154,19 @@ public class MemoryExecutor extends AbstractExecutor {
             });
 
             this.toExecution(executions.get(message.getTaskRun().getExecutionId()).execution);
+        }
+    }
+
+    private void handleFailedExecutionFromExecutor(Execution execution, Exception e) {
+        Execution.FailedExecutionWithLog failedExecutionWithLog = execution.failedExecutionFromExecutor(e);
+        try {
+            log.error("Failed from executor with {}", e.getMessage(), e);
+
+            failedExecutionWithLog.getLogs().forEach(logQueue::emit);
+
+            this.toExecution(failedExecutionWithLog.getExecution());
+        } catch (Exception ex) {
+            log.error("Failed to produce {}", e.getMessage(), ex);
         }
     }
 
