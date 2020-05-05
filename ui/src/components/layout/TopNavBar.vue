@@ -1,38 +1,51 @@
 <template>
     <b-navbar v-if="topNavbar" :class="menuCollapsed" class="top-line" type="dark" variant="dark">
         <b-navbar-nav>
-            <b-nav-text >
+            <b-nav-text>
                 <h1>{{title | cap}}</h1>
 
                 <b-breadcrumb>
-                    <b-breadcrumb-item><router-link :to="{ name: 'home'}"><home /> {{$t('home') | cap}}</router-link></b-breadcrumb-item>
-                    <b-breadcrumb-item v-for="(item, x) in topNavbar.breadcrumb" :to="item.link" :text="item.label" :key="x" />
+                    <b-breadcrumb-item>
+                        <router-link :to="{ name: 'home'}">
+                            <home />
+                            {{$t('home') | cap}}
+                        </router-link>
+                    </b-breadcrumb-item>
+                    <b-breadcrumb-item
+                        v-for="(item, x) in topNavbar.breadcrumb"
+                        :to="item.link"
+                        :text="item.label"
+                        :key="x"
+                    />
                 </b-breadcrumb>
             </b-nav-text>
         </b-navbar-nav>
+        <Auth />
         <vue-progress-bar></vue-progress-bar>
     </b-navbar>
 </template>
 <script>
 import { mapState } from "vuex";
 import Home from "vue-material-design-icons/Home";
+import Auth from "../auth/Auth";
 
 export default {
     components: {
-        Home
+        Home,
+        Auth
     },
     props: {
-        menuCollapsed : {
+        menuCollapsed: {
             type: String,
             required: true
         }
     },
-    watch : {
+    watch: {
         loading() {
             if (this.loading) {
-                this.$Progress.start()
+                this.$Progress.start();
             } else {
-                this.$Progress.finish()
+                this.$Progress.finish();
             }
         }
     },
@@ -55,7 +68,6 @@ export default {
     transition: all 0.3s ease;
     left: 50px;
     width: calc(100% - 50px);
-
 }
 .menu-not-collapsed {
     transition: all 0.3s;
@@ -79,7 +91,7 @@ h1 {
 }
 
 .navbar-expand .navbar-nav .navbar-text {
-    padding: 0
+    padding: 0;
 }
 
 ol.breadcrumb {
