@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './routes/router'
+import routes from './routes/router'
 import store from './stores/store'
 import BootstrapVue from 'bootstrap-vue'
 import configureHttp from './http'
@@ -19,6 +19,12 @@ import VerticalSeparator from './components/layout/VerticalSeparator'
 import 'vue-material-design-icons/styles.css';
 import VueProgressBar from 'vue-progressbar';
 import {extendMoment} from 'moment-range';
+import VueRouter from "vue-router";
+
+
+Vue.use(VueRouter);
+let router = new VueRouter(routes);
+
 
 Vue.use(VueProgressBar, {
   color: 'rgb(143, 255, 199)',
